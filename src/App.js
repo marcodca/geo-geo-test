@@ -1,22 +1,24 @@
-import React from "react";
+import React, {Component} from "react";
 import { geolocated } from "react-geolocated";
-import { getDistance } from 'geolib';
+import { getDistance, getPreciseDistance } from 'geolib';
 
-function App(props) {
-  console.log(props);
-  const { coords } = props.coords ? props : { coords: {} };
-  const { isGeolocationAvailable, isGeolocationEnabled, positionError } = props;
+class App extends Component {
+ 
+  render(){
+  const { coords } = this.props.coords ? this.props : { coords: {} };
+  const { isGeolocationAvailable, isGeolocationEnabled, positionError } = this.props;
 
-  const centerIslandCoords = {
-     longitude: 12.55136489868164,
-     latitude: 55.6507156501139
+  const CornerIslandCoords = {
+     longitude: 12.546826601028442,
+     latitude: 55.649577556747985
   };
 
   const myCoords = coords.longitude ? {latitude : coords.latitude, longitude : coords.longitude} : {latitude : 0, longitude : 0};
 
-  const distanceFromIsland = getDistance(myCoords, centerIslandCoords);
+  const distanceFromIsland = getDistance(myCoords, CornerIslandCoords);
   console.log(myCoords, distanceFromIsland)
-  console.log('hey', getDistance(myCoords, centerIslandCoords))
+
+  const preciseDistanceFromIsland = getPreciseDistance(myCoords, CornerIslandCoords)
 
   return (
     <div>
@@ -26,14 +28,16 @@ function App(props) {
       <p>Geo available: {isGeolocationAvailable.toString()}</p>
       <p>isGeolocationEnabled : {isGeolocationEnabled.toString()}</p>
       <p>positionError : {String(positionError)}</p>
-      <p>You are currently {distanceFromIsland} mts from the center of the island </p>
+      <p>You are currently {distanceFromIsland} mts from the corner of the island </p>
+      <p>You are currently PRECISALY {preciseDistanceFromIsland} mts from the corner of the island </p>
     </div>
-  );
+  )
+}
 }
 
 export default geolocated({
   positionOptions: {
-    enableHighAccuracy: false
+    enableHighAccuracy: true
   },
   userDecisionTimeout: 5000,
   watchPosition: true,

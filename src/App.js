@@ -8,8 +8,8 @@ function App(props) {
   const { isGeolocationAvailable, isGeolocationEnabled, positionError } = props;
 
   const centerIslandCoords = {
-    latitude: 12.55136489868164,
-    longitude: 55.6507156501139
+     longitude: 12.55136489868164,
+     latitude: 55.6507156501139
   };
 
   const myCoords = coords.longitude ? {latitude : coords.latitude, longitude : coords.longitude} : {latitude : 0, longitude : 0};
@@ -21,7 +21,7 @@ function App(props) {
   return (
     <div>
       <h4>Updated version!</h4>
-      <p>Altitude: {coords.latitude}</p>
+      <p>Latitude: {coords.latitude}</p>
       <p>Longitude: {coords.longitude}</p>
       <p>Geo available: {isGeolocationAvailable.toString()}</p>
       <p>isGeolocationEnabled : {isGeolocationEnabled.toString()}</p>

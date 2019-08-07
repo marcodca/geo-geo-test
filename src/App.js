@@ -2,17 +2,47 @@ import React, { Component } from "react";
 import { geolocated } from "react-geolocated";
 import { getDistance, getPreciseDistance, isPointInPolygon } from "geolib";
 
+const intialState = {
+  oneChecked: false,
+  twoChecked: false,
+  threeChecked: false
+};
+
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      checkpointReached : null
+      checkpoints: intialState
+    };
+  }
+
+  componentDidMount() {
+    if (!localStorage.getItem("checkpoints")) {
+      localStorage.setItem(
+        "checkpoints",
+        JSON.stringify(this.state.checkpoints)
+      );
+    } else {
+      const localCheckpoints = JSON.parse(localStorage.getItem("checkpoints"));
+
+      this.setState(() => ({
+        ...this.state,
+        checkpoints: { ...localCheckpoints }
+      }));
     }
   }
 
-  // componentDidMount(){
-  //   const check = localStorage.getItem(checkpointReached) ? 
-  // }
+  componentDidUpdate() {
+    if (
+      JSON.stringify(this.state.checkpoints) !==
+      JSON.stringify(localStorage.getItem("checkpoints"))
+    ) {
+      localStorage.setItem(
+        "checkpoints",
+        JSON.stringify(this.state.checkpoints)
+      );
+    }
+  }
 
   render() {
     console.log(this.props);
@@ -109,6 +139,11 @@ class App extends Component {
         <p>Accuaracy : {coords.accuracy}</p>
         <p>Is on the other side of the bridge: {String(isInTheOtherSide)}</p>
         <p>Is in amager falled : {String(isInAmagerFalled)}</p>
+
+        <button onClick={() => {
+          this.setState(()=>({...this.state, checkpoints : {...this.state.checkpoints, oneChecked : true}}))
+        }}>Checkpoint one</button>
+        {this.state.checkpoints.oneChecked && <button>Checkpoint two</button>}
       </div>
     );
   }
